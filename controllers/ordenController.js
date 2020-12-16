@@ -1,4 +1,5 @@
 const ordenesService = require('../services/ordenesService')
+const validator = require('../sys/validator')
 
 class OrdenController {
     async getOrdenes(req, res) {
@@ -9,12 +10,12 @@ class OrdenController {
             , success: true
         }
 
-        let badRequest = {
+        /* let badRequest = {
             statusCode : 400
             , message: 'Error'
             , data: {}
             , success: false
-        }
+        } */
         
         let offset = 0
         let limit = 100
@@ -38,6 +39,73 @@ class OrdenController {
         let ordenes = await ordenesService.getOrdenes(offset,limit,desde, hasta); // de asinc -> sinc
         response.data = ordenes;
         res.status(response.statusCode).send(response);
+    }
+
+    async getOrdenById(req, res) {
+        // req.params.id
+        let response = {
+            statusCode : 200
+            , message: 'OK'
+            , data: {}
+            , success: true
+        }
+        let orden = await ordenesService.getOrdenById(req.params.id); // de asinc -> sinc
+        response.data = orden[0];
+        res.status(response.statusCode).send(response);
+    }
+
+    async createOrdenes(req, res){
+        let response = {
+            statusCode : 200
+            , message: 'OK'
+            , data: {}
+            , success: true
+        }
+
+        console.log(req.body.nombre);
+        console.log(req.body.telefono);
+        console.log(req.body.correo);
+        console.log(req.body.direccion);
+
+
+        
+        // validar parametros
+        let errorMessage = [];
+        if(!req.body.fecha){
+            errorMessage.push('Parametro fecha es requerido')
+        }
+        else if (!validator.isValidDate(req.body.fecha)){
+            errorMessage.push('Parametro nombre necesita tener formato de fecha')
+        }
+
+        if(!req.body.id){
+            errorMessage.push('Parametro Id es requerido')
+        }
+        else if (!isNaN(req.body.id)){
+            errorMessage.push('Parametro Id necesita ser un entero')
+        }
+
+        if(!req.body.total){
+            errorMessage.push('Parametro total es requerido')
+        }
+        else if (!isNaN(req.body.total)){
+            errorMessage.push('Parametro total necesita ser un entero')
+        }
+
+        if(errorMessage.length){
+            // 400 bad request
+            response.statusCode = 400;
+            response.message = errorMessage
+            response.message.unshift('Bad Request')
+            response.success = false
+            res.status(response.statusCode).send(response);
+        }
+
+        else{
+            await ordenesService.createOrdenes(req.body);
+            response.statusCode = 201; // created
+            res.status(response.statusCode).send(response);
+        }
     }
     
 }

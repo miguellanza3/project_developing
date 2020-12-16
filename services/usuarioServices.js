@@ -1,31 +1,29 @@
 const dbManager = new (require('../db/dbmanager'));
 
-class ClienteService {
-    async getClientes(offset,limit) {
+class UsuarioServices {
+    async getUsuarios(offset,limit) {
         const selectSQl =
-            `SELECT * FROM clientes
+            `SELECT id, correo FROM usuarios
             LIMIT ${limit} OFFSET ${offset}`;
 
-
         return await dbManager.execute('proyecto', selectSQl);
     }
 
-    async getClienteById(id) {
+    async getUsuarioById(id) {
         const selectSQl =
-            `SELECT * FROM clientes WHERE id = ${id}`;
+            `SELECT id, correo FROM usuarios WHERE id = ${id}`;
         return await dbManager.execute('proyecto', selectSQl);
     }
 
-    async createCliente(cliente){
+    async createUsuario(usuario, contrasena, salt){
         const selectSQl =
-            `INSERT INTO clientes
-            (nombre, telefono, correo, direccion)
+            `INSERT INTO usuarios
+            (correo, contrasena, salt)
             VALUES
             (
-            '${cliente.nombre}',
-            ${cliente.telefono},
-            '${cliente.correo}',
-            '${cliente.direccion}',
+            '${usuario.correo}',
+            '${contrasena}',
+            '${salt}'
             ) `
         console.log(selectSQl);
         return await dbManager.execute('proyecto', selectSQl);
@@ -33,5 +31,4 @@ class ClienteService {
     
 }
 
-
-module.exports = new ClienteService();
+module.exports = new UsuarioServices();
