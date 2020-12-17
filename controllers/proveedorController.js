@@ -1,9 +1,9 @@
-const productoService = require('../services/productoService')
+const proveedorService = require('../services/proveedorService')
 const dbmanager = require('../db/dbmanager')
 const validator = require('../sys/validator')
 
-class ProductoController {
-    async getProductos(req, res) {
+class ProveedorController {
+    async getProveedores(req, res) {
         let response = {
             statusCode : 200
             , message: 'OK'
@@ -13,6 +13,7 @@ class ProductoController {
         
         let offset = 0
         let limit = 100
+
         if(req.query.offset && Number.isInteger(req.query.offset)){
             offset = req.query.offset
         }
@@ -20,12 +21,12 @@ class ProductoController {
             limit = req.query.limit
         }
       
-        let productos = await productoService.getProductos(offset,limit); // de asinc -> sinc
-        response.data = productos;
+        let proveedores = await proveedorService.getProveedores(offset,limit); // de asinc -> sinc
+        response.data = proveedores;
         res.status(response.statusCode).send(response);
     }
 
-    async getProductoById(req, res) {
+    async getProveedorById(req, res) {
         // req.params.id
         let response = {
             statusCode : 200
@@ -33,12 +34,12 @@ class ProductoController {
             , data: {}
             , success: true
         }
-        let producto = await productoService.getProductoById(req.params.id); // de asinc -> sinc
-        response.data = producto[0];
+        let proveedor = await proveedorService.getProveedorById(req.params.id); // de asinc -> sinc
+        response.data = proveedor[0];
         res.status(response.statusCode).send(response);
     }
     
-    async createProducto(req, res){
+    async createProveedor(req, res){
         let response = {
             statusCode : 200
             , message: 'OK'
@@ -47,10 +48,9 @@ class ProductoController {
         }
 
         console.log(req.body.nombre);
-        console.log(req.body.descripcion);
-        console.log(req.body.precio);
-        console.log(req.body.costo);
-        //console.log(req.body.proveedor);
+        console.log(req.body.telefono);
+        console.log(req.body.correo);
+        //console.log(req.body.direccion);
 
 
         
@@ -59,34 +59,23 @@ class ProductoController {
         if(!req.body.nombre){
             errorMessage.push('Parametro nombre es requerido')
         }
-        else if (!validator.isTexto(req.body.nombre)){
+        else if (!validator.isPassword(req.body.nombre)){
             errorMessage.push('Parametro nombre necesita ser un texto')
         }
 
-
-        if(!req.body.descripcion){
-            errorMessage.push('Parametro descripcion es requerido')
+        if(!req.body.telefono){
+            errorMessage.push('Parametro telefono es requerido')
         }
-        /* else if (!validator.isTexto(req.body.descripcion)){
-            errorMessage.push('Parametro descripcion necesita ser un texto')
-        } */
-       
-        if(!req.body.precio){
-            errorMessage.push('Parametro precio es requerido')
-        }
-        else if (!validator.isPassword(req.body.precio)){
-            errorMessage.push('Parametro precio necesita tener un formato correcto')
+        else if (!validator.isNumber(req.body.telefono)){
+            errorMessage.push('Parametro telefono necesita ser un entero')
         }
 
-        
-        if(!req.body.costo){
-            errorMessage.push('Parametro precio es requerido')
+        if(!req.body.correo){
+            errorMessage.push('Parametro email es requerido')
         }
-        else if (!validator.isPassword(req.body.costo)){
-            errorMessage.push('Parametro costo necesita tener un formato correcto')
+        else if (!validator.isValidEmail(req.body.correo)){
+            errorMessage.push('Parametro email necesita tener un formato correcto')
         }
-
-
 
         if(errorMessage.length){
             // 400 bad request
@@ -98,7 +87,7 @@ class ProductoController {
         }
 
         else{
-            await productoService.createProducto(req.body);
+            await proveedorService.createProveedor(req.body);
             response.statusCode = 201; // created
             res.status(response.statusCode).send(response);
         }
@@ -106,4 +95,4 @@ class ProductoController {
 }
 
 
-module.exports = new ProductoController();
+module.exports = new ProveedorController();

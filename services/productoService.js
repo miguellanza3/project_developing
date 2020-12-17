@@ -26,7 +26,7 @@ class ProductoService {
         '${producto.descripcion}',
         ${producto.precio},
         ${producto.costo},
-        ${producto.proveedor_id},
+        ${producto.proveedor_id}
         ) `
         console.log(selectSQl);
         return await dbManager.execute('proyecto', selectSQl);

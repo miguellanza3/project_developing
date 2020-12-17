@@ -6,6 +6,7 @@ const clienteController = require('./controllers/clienteController')
 const ordenController = require('./controllers/ordenController')
 const productoController = require('./controllers/productoController');
 const usuarioController = require('./controllers/usuarioController');
+const proveedorController = require('./controllers/proveedorController');
 
 app.get('/clientes', clienteController.getClientes)
 app.get('/cliente/:id', clienteController.getClienteById) // req.params.id
@@ -42,6 +43,8 @@ app.get('/usuarios', async (req, res) => {
     }
 })    
 
-
+app.get('/proveedores', proveedorController.getProveedores)
+app.get('/proveedor/:id', proveedorController.getProveedorById) // req.params.id    
+app.post('/proveedor', proveedorController.createProveedor)
 
 app.listen(3000);

@@ -9,13 +9,6 @@ class OrdenController {
             , data: {}
             , success: true
         }
-
-        /* let badRequest = {
-            statusCode : 400
-            , message: 'Error'
-            , data: {}
-            , success: false
-        } */
         
         let offset = 0
         let limit = 100
@@ -75,20 +68,20 @@ class OrdenController {
             errorMessage.push('Parametro fecha es requerido')
         }
         else if (!validator.isValidDate(req.body.fecha)){
-            errorMessage.push('Parametro nombre necesita tener formato de fecha')
+            errorMessage.push('Parametro fecha necesita tener formato de fecha')
         }
 
         if(!req.body.id){
             errorMessage.push('Parametro Id es requerido')
         }
-        else if (!isNaN(req.body.id)){
+        else if (!validator.isPassword(req.body.id)){
             errorMessage.push('Parametro Id necesita ser un entero')
         }
 
         if(!req.body.total){
             errorMessage.push('Parametro total es requerido')
         }
-        else if (!isNaN(req.body.total)){
+        else if (!validator.isPassword(req.body.total)){
             errorMessage.push('Parametro total necesita ser un entero')
         }
 
