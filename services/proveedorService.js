@@ -1,31 +1,30 @@
 const dbManager = new (require('../db/dbmanager'));
 
-class ClienteService {
-    async getClientes(offset,limit) {
+class ProveedorService {
+    async getProveedores(offset,limit) {
         const selectSQl =
-            `SELECT * FROM clientes
+            `SELECT * FROM proveedores
             LIMIT ${limit} OFFSET ${offset}`;
 
-
         return await dbManager.execute('proyecto', selectSQl);
     }
 
-    async getClienteById(id) {
+    async getProveedorById(id) {
         const selectSQl =
-            `SELECT * FROM clientes WHERE id = ${id}`;
+            `SELECT * FROM proveedores WHERE id = ${id}`;
         return await dbManager.execute('proyecto', selectSQl);
     }
 
-    async createCliente(cliente){
+    async createProveedor(cliente){
         const selectSQl =
-            `INSERT INTO clientes
-            (nombre, telefono, correo, direccion)
+            `INSERT INTO proveedores
+            (nombre, telefono, correo )
             VALUES
             (
             '${cliente.nombre}',
             ${cliente.telefono},
-            '${cliente.correo}',
-            '${cliente.direccion}'
+            '${cliente.correo}'
+            
             ) `
         console.log(selectSQl);
         return await dbManager.execute('proyecto', selectSQl);
@@ -34,4 +33,4 @@ class ClienteService {
 }
 
 
-module.exports = new ClienteService();
+module.exports = new ProveedorService();

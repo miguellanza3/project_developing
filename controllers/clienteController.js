@@ -58,7 +58,7 @@ class ClienteController {
         if(!req.body.nombre){
             errorMessage.push('Parametro nombre es requerido')
         }
-        else if (!validator.isTexto(req.body.nombre)){
+        else if (!validator.isPassword(req.body.nombre)){
             errorMessage.push('Parametro nombre necesita ser un texto')
         }
 

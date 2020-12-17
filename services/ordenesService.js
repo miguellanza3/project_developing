@@ -29,9 +29,9 @@ class ordenesServices {
             (fecha, cliente_id, total)
             VALUES
             (
-            ${orden.fecha},
+            '${orden.fecha}',
             ${orden.id},
-            ${orden.total},
+            ${orden.total}
             ) `
         console.log(selectSQl);
         return await dbManager.execute('proyecto', selectSQl);
