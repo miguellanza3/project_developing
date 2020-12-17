@@ -1,9 +1,9 @@
-const clienteService = require('../services/clienteService')
+const productoService = require('../services/productoService')
 const dbmanager = require('../db/dbmanager')
 const validator = require('../sys/validator')
 
-class ClienteController {
-    async getClientes(req, res) {
+class ProductoController {
+    async getProductos(req, res) {
         let response = {
             statusCode : 200
             , message: 'OK'
@@ -20,12 +20,12 @@ class ClienteController {
             limit = req.query.limit
         }
       
-        let clientes = await clienteService.getClientes(offset,limit); // de asinc -> sinc
-        response.data = clientes;
+        let productos = await productoService.getProductos(offset,limit); // de asinc -> sinc
+        response.data = productos;
         res.status(response.statusCode).send(response);
     }
 
-    async getClienteById(req, res) {
+    async getProductoById(req, res) {
         // req.params.id
         let response = {
             statusCode : 200
@@ -33,12 +33,12 @@ class ClienteController {
             , data: {}
             , success: true
         }
-        let cliente = await clienteService.getClienteById(req.params.id); // de asinc -> sinc
-        response.data = cliente[0];
+        let producto = await productoService.getProductoById(req.params.id); // de asinc -> sinc
+        response.data = producto[0];
         res.status(response.statusCode).send(response);
     }
     
-    async createCliente(req, res){
+    async createProducto(req, res){
         let response = {
             statusCode : 200
             , message: 'OK'
@@ -47,9 +47,10 @@ class ClienteController {
         }
 
         console.log(req.body.nombre);
-        console.log(req.body.telefono);
-        console.log(req.body.correo);
-        console.log(req.body.direccion);
+        console.log(req.body.descripcion);
+        console.log(req.body.precio);
+        console.log(req.body.costo);
+        console.log(req.body.proveedor);
 
 
         
@@ -62,19 +63,30 @@ class ClienteController {
             errorMessage.push('Parametro nombre necesita ser un texto')
         }
 
-        if(!req.body.telefono){
-            errorMessage.push('Parametro telefono es requerido')
+
+        if(!req.body.descripcion){
+            errorMessage.push('Parametro descripcion es requerido')
         }
-        else if (!validator.isNumber(req.body.telefono)){
-            errorMessage.push('Parametro telefono necesita ser un entero')
+        /* else if (!validator.isTexto(req.body.descripcion)){
+            errorMessage.push('Parametro descripcion necesita ser un texto')
+        } */
+       
+        if(!req.body.precio){
+            errorMessage.push('Parametro precio es requerido')
+        }
+        else if (!validator.isPassword(req.body.precio)){
+            errorMessage.push('Parametro precio necesita tener un formato correcto')
         }
 
-        if(!req.body.correo){
-            errorMessage.push('Parametro email es requerido')
+        
+        if(!req.body.costo){
+            errorMessage.push('Parametro precio es requerido')
         }
-        else if (!validator.isValidEmail(req.body.correo)){
-            errorMessage.push('Parametro email necesita tener un formato correcto')
+        else if (!validator.isPassword(req.body.costo)){
+            errorMessage.push('Parametro costo necesita tener un formato correcto')
         }
+
+
 
         if(errorMessage.length){
             // 400 bad request
@@ -86,7 +98,7 @@ class ClienteController {
         }
 
         else{
-            await clienteService.createCliente(req.body);
+            await productoService.createProducto(req.body);
             response.statusCode = 201; // created
             res.status(response.statusCode).send(response);
         }
@@ -94,4 +106,4 @@ class ClienteController {
 }
 
 
-module.exports = new ClienteController();
+module.exports = new ProductoController();

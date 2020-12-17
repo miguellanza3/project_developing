@@ -4,7 +4,8 @@ const app = express();
 app.use(bodyParser.json({ extended: true }));
 const clienteController = require('./controllers/clienteController')
 const ordenController = require('./controllers/ordenController')
-const usuarioController = require('./controllers/usuarioController')
+const productoController = require('./controllers/productoController');
+const usuarioController = require('./controllers/usuarioController');
 
 app.get('/clientes', clienteController.getClientes)
 app.get('/cliente/:id', clienteController.getClienteById) // req.params.id
@@ -13,6 +14,10 @@ app.post('/cliente', clienteController.createCliente)
 app.get('/ordenes', ordenController.getOrdenes)
 app.get('/orden/:id', ordenController.getOrdenById) // req.params.id
 app.post('/orden', ordenController.createOrdenes)
+
+app.get('/productos', productoController.getProductos)
+app.get('/producto/:id', productoController.getProductoById) // req.params.id
+app.post('/producto', productoController.createProducto)
 
 app.get('/usuario/:id', usuarioController.getUsuarioById) // req.params.id    
 app.post('/usuario', usuarioController.createUsuario)
